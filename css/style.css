@@ -32,31 +32,21 @@ html {
   background: #0a0a0a;
 }
 /* ---------- FIXED BACKGROUND ---------- */
-.fixed-bg-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./img/bg-hero.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: -1;
-  opacity: 0.35;
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  min-height: 100%;
+  background: #0a0a0a;
 }
-
 body {
-  position: relative;
-  z-index: 0;
   font-family: var(--font-primary);
   font-weight: 200;
-  background: transparent;
+  background: #0a0a0a;
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-
+.fixed-bg-overlay { display: none; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
