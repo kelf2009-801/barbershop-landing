@@ -20,26 +20,7 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <img src="./img/bg-hero.png" class="fixed-bg-img" alt="" id="fixedBg">
   <div class="fixed-bg-overlay"></div>
-  <script>
-    // Картинка фиксируется через JS — обход бага мобильного Chrome
-    (function() {
-      const bg = document.getElementById('fixedBg');
-      if (!bg) return;
-      let ticking = false;
-      function updateBg() {
-        bg.style.transform = 'translateY(' + window.scrollY + 'px)';
-        ticking = false;
-      }
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          requestAnimationFrame(updateBg);
-          ticking = true;
-        }
-      }, { passive: true });
-    })();
-  </script>
 
   <!-- ===== HEADER ===== -->
   <header>
