@@ -27,7 +27,7 @@
 
 /* ---------- RESET ---------- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: var(--font-primary);
   font-weight: 200;
@@ -35,18 +35,29 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 .fixed-bg {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: url('./img/bg-hero.png') center/cover no-repeat;
   pointer-events: none;
   z-index: -1;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .fixed-bg-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: var(--color-bg);
   opacity: 0.75;
   pointer-events: none;
