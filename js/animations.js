@@ -6,11 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- HEADER SCROLL ----------
   const header = document.querySelector('header');
-  let lastScroll = 0;
   window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    header.classList.toggle('scrolled', y > 60);
-    lastScroll = y;
+    header.classList.toggle('scrolled', window.scrollY > 60);
   });
 
   // ---------- BURGER MENU ----------
@@ -22,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     burger.addEventListener('click', () => {
       const isOpen = nav.classList.toggle('open');
       burger.classList.toggle('active');
-      burger.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Меню');
 
       if (nav.classList.contains('open')) {
         nav.style.cssText = `
@@ -34,13 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
           right: 0;
           background: rgba(10,10,10,0.98);
           backdrop-filter: blur(20px);
-          padding: 20px;
+          padding: 24px;
           gap: 16px;
-          border-bottom: 1px solid var(--color-border, #2a2a2a);
+          border-bottom: 1px solid #2a2a2a;
           z-index: 999;
         `;
         if (headerCta) headerCta.style.display = 'none';
-        // Show copy of CTA in mobile nav
         const mobileCta = document.createElement('a');
         mobileCta.href = '#cta';
         mobileCta.className = 'btn btn-primary';
@@ -49,16 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         nav.appendChild(mobileCta);
       } else {
         nav.style.cssText = '';
-        // Remove mobile CTA duplicates
         const mobileCtas = nav.querySelectorAll('.btn.btn-primary');
-        mobileCtas.forEach(el => {
-          if (el !== headerCta) el.remove();
-        });
+        mobileCtas.forEach(el => { if (el !== headerCta) el.remove(); });
         if (headerCta) headerCta.style.display = '';
       }
     });
 
-    // Close on link click
     nav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
@@ -74,18 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
     q.addEventListener('click', () => {
       const item = q.closest('.faq-item');
       const isActive = item.classList.contains('active');
-
-      // Close all
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-
-      // Open clicked if wasn't open
       if (!isActive) item.classList.add('active');
     });
   });
 
   // ---------- REVEAL ON SCROLL ----------
   const revealElements = document.querySelectorAll('.reveal');
-
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -93,27 +79,53 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
-
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
   revealElements.forEach(el => revealObserver.observe(el));
 
-  // ---------- SMOOTH SCROLL FOR ANCHORS ----------
+  // ---------- SMOOTH SCROLL ----------
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const target = document.querySelector(anchor.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        const offset = 80;
-        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        const top = target.getBoundingClientRect().top + window.scrollY - 80;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     });
   });
 
-  // ---------- HERO PARALLAX (мышь) ----------
+  // ---------- ANIMATED COUNTERS ----------
+  const counters = document.querySelectorAll('.stat-num');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const text = el.textContent;
+        const num = parseInt(text.replace(/[^0-9]/g, ''));
+        const suffix = text.replace(/[0-9]/g, '').replace(/[+.]/g, '');
+        const prefix = text.includes('+') ? '+' : '';
+        
+        if (num > 0) {
+          let start = 0;
+          const duration = 1500;
+          const step = Math.ceil(num / 60);
+          const timer = setInterval(() => {
+            start += step;
+            if (start >= num) {
+              el.textContent = prefix + num + suffix;
+              clearInterval(timer);
+            } else {
+              el.textContent = prefix + start + suffix;
+            }
+          }, duration / 60);
+        }
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => counterObserver.observe(el));
+
+  // ---------- HERO PARALLAX ----------
   const hero = document.querySelector('.hero');
   if (hero) {
     hero.addEventListener('mousemove', (e) => {
@@ -121,6 +133,62 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
       const bg = hero.querySelector('.hero-bg');
       if (bg) bg.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
+    });
+  }
+
+  // ---------- LIGHTBOX ----------
+  const lightboxLinks = document.querySelectorAll('[data-lightbox]');
+  if (lightboxLinks.length > 0) {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox-overlay';
+    lightbox.innerHTML = '<span class="lightbox-close">&times;</span><img src="" alt=""><span class="lightbox-prev">&lsaquo;</span><span class="lightbox-next">&rsaquo;</span>';
+    document.body.appendChild(lightbox);
+
+    const lightboxImg = lightbox.querySelector('img');
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    const prevBtn = lightbox.querySelector('.lightbox-prev');
+    const nextBtn = lightbox.querySelector('.lightbox-next');
+    let currentIndex = 0;
+    const images = Array.from(lightboxLinks).map(a => a.href);
+
+    lightboxLinks.forEach((a, i) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentIndex = i;
+        showImage(i);
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function showImage(i) {
+      lightboxImg.src = images[i];
+      lightboxImg.alt = 'Gallery image';
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    });
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + images.length) % images.length; showImage(currentIndex); }
+      if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % images.length; showImage(currentIndex); }
     });
   }
 });
