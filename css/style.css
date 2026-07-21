@@ -31,7 +31,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-primary);
   font-weight: 200;
-  background: var(--color-bg);
+  background: var(--color-bg) url('./img/bg-hero.png') center/cover no-repeat fixed;
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -41,8 +41,8 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: url('./img/bg-hero.png') center/cover no-repeat;
-  opacity: 0.25;
+  background: var(--color-bg);
+  opacity: 0.75;
   pointer-events: none;
   z-index: -1;
 }
