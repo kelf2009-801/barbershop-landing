@@ -585,8 +585,7 @@ footer {
 .footer-bottom p { font-size: 13px; color: var(--color-text-muted); }
 
 /* ---------- REVEAL ---------- */
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 1; transform: translateY(0); }
 
 /* ---------- LIGHTBOX ---------- */
 .lightbox-overlay {

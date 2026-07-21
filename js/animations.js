@@ -1,37 +1,35 @@
 /* ============================================
-   BRUTUS — Animations
+   BRUTUS — Animations v2 (GSAP + fixed)
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- GSAP ANIMATIONS ----------
   if (typeof gsap !== 'undefined') {
+    ScrollTrigger.refresh();
+
     // Hero parallax
     gsap.to('.hero-collage', {
       y: '15%',
       ease: 'none',
       scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
     });
-    gsap.to('.hero-content', {
-      y: '5%',
-      ease: 'none',
-      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
-    });
 
-    // Hero title reveal
+    // Hero reveal
     gsap.from('.hero-title', { y: 80, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
     gsap.from('.hero-subtitle', { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 });
     gsap.from('.hero-buttons', { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.6 });
     gsap.from('.hero-stats', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.8 });
     gsap.from('.hero-badge', { scale: 0, opacity: 0, duration: 0.5, ease: 'back.out(2)', delay: 0.1 });
 
-    // Section reveals
+    // Section reveals with ScrollTrigger
     gsap.utils.toArray('.section').forEach(section => {
       const cards = section.querySelectorAll('.reveal');
       if (cards.length) {
-        gsap.from(cards, {
-          y: 60,
-          opacity: 0,
+        gsap.set(cards, { opacity: 0, y: 40 });
+        gsap.to(cards, {
+          y: 0,
+          opacity: 1,
           duration: 0.8,
           stagger: 0.15,
           ease: 'power3.out',
@@ -58,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             duration: 1.5,
             ease: 'power2.out',
             snap: { innerHTML: 1 },
-            onUpdate: () => {
-              const val = Math.round(el.textContent) || 0;
+            onUpdate: function() {
+              const val = Math.round(parseFloat(this.targets()[0].textContent)) || 0;
               el.innerHTML = val + suffix;
             }
           });
@@ -81,24 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (burger && nav) {
     burger.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('open');
+      nav.classList.toggle('open');
       burger.classList.toggle('active');
 
       if (nav.classList.contains('open')) {
-        nav.style.cssText = `
-          display: flex;
-          flex-direction: column;
-          position: absolute;
-          top: 80px;
-          left: 0;
-          right: 0;
-          background: rgba(10,10,10,0.98);
-          backdrop-filter: blur(20px);
-          padding: 24px;
-          gap: 16px;
-          border-bottom: 1px solid #2a2a2a;
-          z-index: 999;
-        `;
+        nav.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:80px;left:0;right:0;background:rgba(10,10,10,0.98);backdrop-filter:blur(20px);padding:24px;gap:16px;border-bottom:1px solid #2a2a2a;z-index:999;';
         if (headerCta) headerCta.style.display = 'none';
         const mobileCta = document.createElement('a');
         mobileCta.href = '#cta';
@@ -108,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nav.appendChild(mobileCta);
       } else {
         nav.style.cssText = '';
-        const mobileCtas = nav.querySelectorAll('.btn.btn-primary');
-        mobileCtas.forEach(el => { if (el !== headerCta) el.remove(); });
+        nav.querySelectorAll('.btn.btn-primary').forEach(el => { if (el !== headerCta) el.remove(); });
         if (headerCta) headerCta.style.display = '';
       }
     });
@@ -134,18 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---------- REVEAL ON SCROLL ----------
-  const revealElements = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-  revealElements.forEach(el => revealObserver.observe(el));
-
   // ---------- SMOOTH SCROLL ----------
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
@@ -157,48 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // ---------- ANIMATED COUNTERS ----------
-  const counters = document.querySelectorAll('.stat-num');
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const text = el.textContent;
-        const num = parseInt(text.replace(/[^0-9]/g, ''));
-        const suffix = text.replace(/[0-9]/g, '').replace(/[+.]/g, '');
-        const prefix = text.includes('+') ? '+' : '';
-        
-        if (num > 0) {
-          let start = 0;
-          const duration = 1500;
-          const step = Math.ceil(num / 60);
-          const timer = setInterval(() => {
-            start += step;
-            if (start >= num) {
-              el.textContent = prefix + num + suffix;
-              clearInterval(timer);
-            } else {
-              el.textContent = prefix + start + suffix;
-            }
-          }, duration / 60);
-        }
-        counterObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  counters.forEach(el => counterObserver.observe(el));
-
-  // ---------- HERO PARALLAX ----------
-  const hero = document.querySelector('.hero');
-  if (hero) {
-    hero.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      const bg = hero.querySelector('.hero-bg');
-      if (bg) bg.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
-    });
-  }
 
   // ---------- LIGHTBOX ----------
   const lightboxLinks = document.querySelectorAll('[data-lightbox]');
@@ -225,29 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    function showImage(i) {
-      lightboxImg.src = images[i];
-      lightboxImg.alt = 'Gallery image';
-    }
-
+    function showImage(i) { lightboxImg.src = images[i]; }
     closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      showImage(currentIndex);
-    });
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
-    });
+    prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + images.length) % images.length; showImage(currentIndex); });
+    nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % images.length; showImage(currentIndex); });
 
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
+    function closeLightbox() { lightbox.classList.remove('active'); document.body.style.overflow = ''; }
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', (e) => {
       if (!lightbox.classList.contains('active')) return;
       if (e.key === 'Escape') closeLightbox();
