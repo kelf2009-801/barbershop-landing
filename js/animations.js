@@ -4,6 +4,70 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ---------- GSAP ANIMATIONS ----------
+  if (typeof gsap !== 'undefined') {
+    // Hero parallax
+    gsap.to('.hero-collage', {
+      y: '15%',
+      ease: 'none',
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+    });
+    gsap.to('.hero-content', {
+      y: '5%',
+      ease: 'none',
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+    });
+
+    // Hero title reveal
+    gsap.from('.hero-title', { y: 80, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
+    gsap.from('.hero-subtitle', { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 });
+    gsap.from('.hero-buttons', { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.6 });
+    gsap.from('.hero-stats', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.8 });
+    gsap.from('.hero-badge', { scale: 0, opacity: 0, duration: 0.5, ease: 'back.out(2)', delay: 0.1 });
+
+    // Section reveals
+    gsap.utils.toArray('.section').forEach(section => {
+      const cards = section.querySelectorAll('.reveal');
+      if (cards.length) {
+        gsap.from(cards, {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        });
+      }
+    });
+
+    // Counter animation
+    gsap.utils.toArray('.stat-num').forEach(el => {
+      const text = el.textContent;
+      const num = parseInt(text.replace(/[^0-9]/g, '')) || 0;
+      const suffix = text.replace(/[0-9]/g, '');
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 90%',
+        onEnter: () => {
+          gsap.to(el, {
+            innerHTML: num + suffix,
+            duration: 1.5,
+            ease: 'power2.out',
+            snap: { innerHTML: 1 },
+            onUpdate: () => {
+              const val = Math.round(el.textContent) || 0;
+              el.innerHTML = val + suffix;
+            }
+          });
+        }
+      });
+    });
+  }
+
   // ---------- HEADER SCROLL ----------
   const header = document.querySelector('header');
   window.addEventListener('scroll', () => {

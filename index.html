@@ -15,6 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -37,9 +39,14 @@
   </header>
 
   <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1593702233354-259d1f794ed1?w=1920&q=80');"></div>
+  <section class="hero" id="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-collage">
+        <div class="hero-collage-img hero-collage-1" style="background-image: url('https://images.unsplash.com/photo-1593702233354-259d1f794ed1?w=800&q=80');"></div>
+        <div class="hero-collage-img hero-collage-2" style="background-image: url('https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=800&q=80');"></div>
+        <div class="hero-collage-img hero-collage-3" style="background-image: url('https://images.unsplash.com/photo-1621607512214-68297480165e?w=800&q=80');"></div>
+        <div class="hero-collage-img hero-collage-4" style="background-image: url('https://images.unsplash.com/photo-1585747861115-1deabce1e8a0?w=800&q=80');"></div>
+      </div>
     <div class="container hero-content">
       <span class="hero-badge">Премиальный барбершоп</span>
       <h1 class="hero-title">Мужество<br>в каждой детали</h1>
@@ -63,22 +70,22 @@
       <h2 class="section-title">Настоящая мужская&nbsp;рука</h2>
       <div class="features-grid">
         <div class="feature-card reveal">
-          <div class="feature-icon">✂️</div>
+          <div class="feature-icon"><i class="fas fa-cut"></i></div>
           <h3>Ручная работа</h3>
           <p>Никаких машинок — только ножницы и опасная бритва. Каждая стрижка — индивидуальный подход к форме головы и типу волос.</p>
         </div>
         <div class="feature-card reveal">
-          <div class="feature-icon">🧔</div>
+          <div class="feature-icon"><i class="fas fa-beard"></i></div>
           <h3>Мастерство бороды</h3>
           <p>Оформление, коррекция, восстановление. Превратим неопрятную щетину в произведение искусства.</p>
         </div>
         <div class="feature-card reveal">
-          <div class="feature-icon">🥃</div>
+          <div class="feature-icon"><i class="fas fa-glass-whiskey"></i></div>
           <h3>Атмосфера</h3>
           <p>Виски, кожаные кресла, мужской разговор. У нас не просто стригут — у нас отдыхают душой.</p>
         </div>
         <div class="feature-card reveal">
-          <div class="feature-icon">⚡</div>
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
           <h3>Быстро и удобно</h3>
           <p>Запись в Telegram за 30 секунд. Напомним о визите. Среднее время ожидания — 5 минут.</p>
         </div>
