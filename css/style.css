@@ -51,6 +51,8 @@ body {
   pointer-events: none;
   z-index: -2;
   will-change: transform;
+  display: block !important;
+  opacity: 0.35;
 }
 .fixed-bg-overlay {
   position: fixed;
