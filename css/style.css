@@ -36,19 +36,16 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-.fixed-bg {
+.fixed-bg-img {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   width: 100vw;
   height: 100vh;
-  background: url('./img/bg-hero.png') center/cover no-repeat;
+  object-fit: cover;
   pointer-events: none;
   z-index: -1;
   will-change: transform;
-  transform: translateZ(0);
 }
 .fixed-bg-overlay {
   position: fixed;
