@@ -31,14 +31,20 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-primary);
   font-weight: 200;
-  background: var(--color-bg) url('./img/bg-hero.png') center/cover no-repeat fixed;
+  background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-body::before {
-  content: '';
+.fixed-bg {
+  position: fixed;
+  inset: 0;
+  background: url('./img/bg-hero.png') center/cover no-repeat;
+  pointer-events: none;
+  z-index: -1;
+}
+.fixed-bg-overlay {
   position: fixed;
   inset: 0;
   background: var(--color-bg);
