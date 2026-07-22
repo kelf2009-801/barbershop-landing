@@ -307,8 +307,10 @@ nav a:hover::after { width: 100%; }
   display: flex;
   gap: 16px;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   margin-bottom: 60px;
+  text-align: center;
 }
 .hero-stats {
   display: flex;
