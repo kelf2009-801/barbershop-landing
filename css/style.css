@@ -315,6 +315,9 @@ nav a:hover::after { width: 100%; }
 }
 .hero-buttons a {
   flex: 0 0 auto;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 .hero-stats {
   display: flex;
