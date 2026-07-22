@@ -311,6 +311,10 @@ nav a:hover::after { width: 100%; }
   flex-wrap: wrap;
   margin-bottom: 60px;
   text-align: center;
+  width: 100%;
+}
+.hero-buttons a {
+  flex: 0 0 auto;
 }
 .hero-stats {
   display: flex;
