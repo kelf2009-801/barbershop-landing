@@ -304,20 +304,14 @@ nav a:hover::after { width: 100%; }
   font-weight: 400;
 }
 .hero-buttons {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 60px;
+  display: block;
   text-align: center;
+  margin-bottom: 60px;
   width: 100%;
 }
 .hero-buttons a {
-  flex: 0 0 auto;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
+  margin: 8px;
 }
 .hero-stats {
   display: flex;
